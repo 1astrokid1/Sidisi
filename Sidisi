@@ -1,0 +1,133 @@
+import java.util.*;
+import java.lang.Math;
+public class Sidisi
+{
+  public Sidisi(){}
+    
+  public static void main(String[] args)
+  {
+    Sidisi sidisi = new Sidisi();
+    ArrayList<String> deck = new ArrayList<String>();
+    ArrayList<Integer> numZombieList = new ArrayList<Integer>();
+    Scanner s = new Scanner(System.in);
+    int numRun = 0;
+    double avgZombies = 0.0;
+    int tot = 0;
+    int numCreatures = 0;
+    int numNonCreatures = 0;
+    int numLands = 0;
+    int RN = 0;
+    int decksize = 0;
+    int zombieCount = 0;
+    double standardDev = 0.0;
+    String temp = "";
+    System.out.print("How many creatures are in your deck (not including Sidisi)? ");
+    numCreatures = s.nextInt();
+    System.out.print("How many noncreatures are in your deck? ");
+    numNonCreatures = s.nextInt();
+    System.out.print("How many lands are in your deck? ");
+    numLands = s.nextInt();
+    do
+    {
+      zombieCount = 0;
+      for(int i = 0; i < numCreatures; i++) //adds creatures to the deck
+      {
+        deck.add("Creature");
+      }
+      for(int j = 0; j < numNonCreatures; j++) //adds noncreatures to the deck
+      {
+        deck.add("NonCreature");  
+      }
+      for(int k = 0; k < numLands; k++) // adds lands to the deck
+      {
+        deck.add("Land");  
+      }
+      decksize = deck.size();
+      for (int l = 0; l <= 11; l++) //shuffles the deck 12 times
+      {
+        Collections.shuffle(deck);
+      }
+      for(int m = 0; m < 11; m++) //removes 11 cards from deck for turn 4 sidisi
+      {
+        RN = sidisi.getRandomNumber(decksize);
+        deck.remove(RN);
+        decksize--;
+      }
+        do
+        {
+          int creatureCount = 0;
+          int nonCreatureCount = 0;
+          int landCount = 0;
+          for(int o = 0; o < 3; o++)
+          {
+            RN = sidisi.getRandomNumber(decksize);
+            temp = deck.get(o);
+            decksize--;
+            deck.remove(o);
+            if(temp.equals("Creature"))
+            {
+              creatureCount++;
+            }
+            else if(temp.equals("NonCreature"))
+            {
+              nonCreatureCount++;  
+            }
+            else if(temp.equals("Land"))
+            {
+              landCount++;  
+            }
+            else
+            {
+              System.out.println("An error has occured!");  
+            }
+          }
+          decksize--;
+          if(creatureCount > 0)
+         {
+           zombieCount++;
+         }
+      }while(decksize >= 3);
+      numZombieList.add(zombieCount);
+      numRun++;
+      }while(numRun < 1000);
+      for(int n = 0; n < numZombieList.size(); n++)
+      {
+        tot += numZombieList.get(n);
+      }
+      avgZombies = tot/numZombieList.size();
+      standardDev = sidisi.sd(numZombieList, avgZombies);
+      
+      System.out.println("Number of 2/2 Zombies created: " + avgZombies + " +/- " + standardDev);
+  }
+  
+  public int getRandomNumber(int decksize)
+  {
+    int rand = 0;
+    rand = (int)(Math.random() * decksize);
+    return rand;
+  } 
+  
+  public double sd (ArrayList<Integer> table, double average)
+{
+    // Step 1: 
+    double mean = average;
+    double temp = 0;
+
+    for (int i = 0; i < table.size(); i++)
+    {
+        int val = table.get(i);
+
+        // Step 2:
+        double squrDiffToMean = Math.pow(val - mean, 2);
+
+        // Step 3:
+        temp += squrDiffToMean;
+    }
+
+    // Step 4:
+    double meanOfDiffs = (double) temp / (double) (table.size());
+
+    // Step 5:
+    return Math.sqrt(meanOfDiffs);
+}
+}
